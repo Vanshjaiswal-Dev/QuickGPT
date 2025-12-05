@@ -53,7 +53,21 @@ export const imageMessageController = async (req, res) => {
 
        const {prompt, chatId, isPublished} = req.body;
 
+       if (!prompt || !chatId) {
+           return res.status(400).json({success: false, message: "Prompt and chatId are required"});
+       }
+
+       // Verify ImageKit credentials
+       if (!process.env.IMAGEKIT_PUBLIC_KEY || !process.env.IMAGEKIT_PRIVATE_KEY || !process.env.IMAGEKIT_URL_ENDPOINT) {
+           console.error("ImageKit credentials missing");
+           return res.status(500).json({success: false, message: "ImageKit configuration error"});
+       }
+
        const chat = await Chat.findOne({userId, _id:chatId});
+
+       if (!chat) {
+           return res.status(404).json({success: false, message: "Chat not found"});
+       }
 
          chat.messages.push({
            role: "user",
@@ -66,15 +80,20 @@ export const imageMessageController = async (req, res) => {
 
        const encodedPrompt = encodeURIComponent(prompt);
 
-       const generatedImageURL = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/AuraCoreAI/${Date.now()}.png?tr=w-800,
-       h-800`;
+       const generatedImageURL = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/AuraCoreAI/${Date.now()}.png?tr=w-800,h-800`;
 
-      const aiImageResponse =  await axios.get(generatedImageURL, {responseType:"arraybuffer"});
+       console.log("Fetching image from:", generatedImageURL);
+
+      const aiImageResponse =  await axios.get(generatedImageURL, {
+          responseType:"arraybuffer",
+          timeout: 30000 // 30 second timeout
+      });
 
       // conver to base64
 
       const base64Image = `data:image/png;base64,${Buffer.from(aiImageResponse.data, "binary").toString("base64")}`;
 
+        console.log("Uploading to ImageKit...");
 
         // upload to imagekit
 
@@ -83,6 +102,8 @@ export const imageMessageController = async (req, res) => {
             fileName:`${Date.now()}.png`,
             folder:"AuraCoreAI"
         });
+
+        console.log("Image uploaded successfully:", uploadResponse.url);
 
         const reply = {
       role : 'assistant',
@@ -99,7 +120,9 @@ export const imageMessageController = async (req, res) => {
 
        
     } catch (error) {
-        res.json({success: false , message: error.message})
+        console.error("Image generation error:", error.response?.data || error.message);
+        const errorMessage = error.response?.data?.message || error.message || "Image generation failed";
+        res.status(error.response?.status || 500).json({success: false, message: errorMessage})
         
     }
 }

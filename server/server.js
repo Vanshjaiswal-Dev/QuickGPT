@@ -11,11 +11,36 @@ const app = express()
 await connectDB()
 
 // Middleware
-app.use(cors())
+const corsOptions = {
+  origin: process.env.CLIENT_URL || '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+app.use(cors(corsOptions))
 app.use(express.json())
 
 // Routes
 app.get('/', (req, res) => res.send('Server is Live!'))
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  const envCheck = {
+    mongodb: !!process.env.MONGODB_URI,
+    jwt: !!process.env.JWT_SECRET,
+    imagekit_public: !!process.env.IMAGEKIT_PUBLIC_KEY,
+    imagekit_private: !!process.env.IMAGEKIT_PRIVATE_KEY,
+    imagekit_endpoint: !!process.env.IMAGEKIT_URL_ENDPOINT,
+    client_url: process.env.CLIENT_URL || 'not set'
+  };
+  
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: envCheck
+  });
+});
+
 app.use('/api/user', userRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
