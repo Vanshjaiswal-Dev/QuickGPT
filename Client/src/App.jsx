@@ -42,8 +42,8 @@ const App = () => {
     {!isMenuopen && <Menu className="absolute top-4 left-4 w-7 h-7 cursor-pointer md:hidden text-gray-900 dark:text-white z-20 drop-shadow-sm active:scale-90 transition-transform" onClick={()=> setIsMenuOpen(true)} />}
 
     {user ? (
-      <div className="bg-gradient-to-b from-gray-50 to-white dark:from-[#242124] dark:to-[#000000]
-      text-gray-900 dark:text-white min-h-screen">
+      <div className="bg-gray-50 dark:bg-[#0f0f0f]
+      text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
         <div className="flex h-screen w-screen relative">
           {/* Mobile sidebar backdrop */}
           {isMenuopen && (
@@ -60,8 +60,8 @@ const App = () => {
         </div>
       </div>
     ) : (
-      <div className="bg-gradient-to-b from-gray-50 to-white dark:from-[#242124] dark:to-[#000000] flex
-      items-center justify-center h-screen w-screen">
+      <div className="bg-gray-50 dark:bg-[#0f0f0f] flex
+      items-center justify-center h-screen w-screen transition-colors duration-300">
         <Login/>
       </div>
     )}
