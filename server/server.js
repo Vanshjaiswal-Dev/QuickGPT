@@ -28,9 +28,7 @@ app.get('/api/health', (req, res) => {
   const envCheck = {
     mongodb: !!process.env.MONGODB_URI,
     jwt: !!process.env.JWT_SECRET,
-    imagekit_public: !!process.env.IMAGEKIT_PUBLIC_KEY,
-    imagekit_private: !!process.env.IMAGEKIT_PRIVATE_KEY,
-    imagekit_endpoint: !!process.env.IMAGEKIT_URL_ENDPOINT,
+    image_generation: 'Pollinations.ai (no API key required)',
     client_url: process.env.CLIENT_URL || 'not set'
   };
   

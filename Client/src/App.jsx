@@ -3,6 +3,7 @@ import Sidebar from "./Components/Sidebar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Chatbox from "./Components/Chatbox";
 import Community from "./pages/Community";
+import LoadingAnimationDemo from "./Components/LoadingAnimationDemo";
 import { assets } from "./assets/assets";
 import './assets/prism.css'
 import Loading from "./pages/Loading";
@@ -56,6 +57,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Chatbox isMenuopen={isMenuopen} />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/demo" element={<LoadingAnimationDemo />} />
           </Routes>
         </div>
       </div>

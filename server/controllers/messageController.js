@@ -2,7 +2,7 @@
 import axios from "axios";
 import Chat from "../models/chat.js";
 import User from "../models/User.js";
-import imageKit from "../configs/imageKit.js";
+import { generatePollinationsImage } from "../configs/pollinations.js";
 import openai from "../configs/openai.js";
 
 export const textMessageController = async (req, res) => {
@@ -63,7 +63,7 @@ export const textMessageController = async (req, res) => {
 };
 
 
-// image generation controller
+// image generation controller using Pollinations.ai
 
 export const imageMessageController = async (req, res) => {
     try {
@@ -73,12 +73,6 @@ export const imageMessageController = async (req, res) => {
 
        if (!prompt || !chatId) {
            return res.status(400).json({success: false, message: "Prompt and chatId are required"});
-       }
-
-       // Verify ImageKit credentials
-       if (!process.env.IMAGEKIT_PUBLIC_KEY || !process.env.IMAGEKIT_PRIVATE_KEY || !process.env.IMAGEKIT_URL_ENDPOINT) {
-           console.error("ImageKit credentials missing");
-           return res.status(500).json({success: false, message: "ImageKit configuration error"});
        }
 
        const chat = await Chat.findOne({userId, _id:chatId});
@@ -94,54 +88,40 @@ export const imageMessageController = async (req, res) => {
            isImage: true,
        });
 
-       // encode the prompt
+       console.log("Generating image with Pollinations.ai for prompt:", prompt);
 
-       const encodedPrompt = encodeURIComponent(prompt);
+       // Generate image URL using Pollinations.ai
+       // Using MAXIMUM quality settings - 4.2 MP images!
+       const generatedImageURL = generatePollinationsImage(prompt, {
+           width: 2048,        // MAXIMUM resolution for best quality
+           height: 2048,       // 4.2 megapixels - professional print quality
+           model: "flux-pro",  // BEST quality model available
+           nologo: true,
+           enhance: true,      // AI prompt enhancement for better results
+       });
 
-       const generatedImageURL = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/QuickGPT/${Date.now()}.png?tr=w-800,h-800`;
+       console.log("Generated image URL:", generatedImageURL);
 
-       console.log("Fetching image from:", generatedImageURL);
+       // Pollinations.ai images are directly accessible via URL
+       // No need to download and re-upload, which saves time and resources
 
-      const aiImageResponse =  await axios.get(generatedImageURL, {
-          responseType:"arraybuffer",
-          timeout: 30000 // 30 second timeout
-      });
+       const reply = {
+           role: 'assistant',
+           content: generatedImageURL,
+           timestamp: Date.now(),
+           isImage: true,
+           isPublished
+       };
 
-      // conver to base64
+       res.json({ success: true, reply });
 
-      const base64Image = `data:image/png;base64,${Buffer.from(aiImageResponse.data, "binary").toString("base64")}`;
+       chat.messages.push(reply);
+       await chat.save();
 
-        console.log("Uploading to ImageKit...");
-
-        // upload to imagekit
-
-        const uploadResponse = await imageKit.upload({
-            file: base64Image,
-            fileName:`${Date.now()}.png`,
-            folder:"AuraCoreAI"
-        });
-
-        console.log("Image uploaded successfully:", uploadResponse.url);
-
-        const reply = {
-      role : 'assistant',
-      content: uploadResponse.url,
-      timestamp: Date.now(),
-      isImage: true,
-      isPublished
-    };
-
-    res.json({ success: true, reply });
-
-    chat.messages.push(reply)
-    await chat.save()
-
-       
     } catch (error) {
         console.error("Image generation error:", error.response?.data || error.message);
         const errorMessage = error.response?.data?.message || error.message || "Image generation failed";
         res.status(error.response?.status || 500).json({success: false, message: errorMessage})
-        
     }
 }
   
