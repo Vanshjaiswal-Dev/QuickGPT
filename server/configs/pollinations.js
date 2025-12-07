@@ -11,12 +11,13 @@ const POLLINATIONS_BASE_URL = "https://image.pollinations.ai/prompt";
  */
 export const generatePollinationsImage = (prompt, options = {}) => {
   const {
-    width = 1024,
-    height = 1024,
+    width = 2048,        // 🔥🔥 ULTRA MAX: 2K resolution (2048x2048)
+    height = 2048,       // 🏆 MAXIMUM quality possible with Pollinations
     seed = Date.now(),
-    model = "flux", // flux, flux-realism, flux-anime, flux-3d, turbo
+    model = "flux-pro",  // 🏆 Best quality model available
     nologo = true,
-    enhance = true,
+    enhance = true,      // AI enhancement ON for better prompts
+    isPrivate = false,   // Set true if you want images not indexed by search engines
   } = options;
 
   // Encode the prompt for URL
@@ -30,6 +31,7 @@ export const generatePollinationsImage = (prompt, options = {}) => {
     model,
     nologo: nologo.toString(),
     enhance: enhance.toString(),
+    private: isPrivate.toString(),
   });
 
   // Construct the full URL

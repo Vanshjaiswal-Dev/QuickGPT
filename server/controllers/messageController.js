@@ -91,13 +91,16 @@ export const imageMessageController = async (req, res) => {
        console.log("Generating image with Pollinations.ai for prompt:", prompt);
 
        // Generate image URL using Pollinations.ai
-       // Using MAXIMUM quality settings - 4.2 MP images!
-       const generatedImageURL = generatePollinationsImage(prompt, {
-           width: 2048,        // MAXIMUM resolution for best quality
-           height: 2048,       // 4.2 megapixels - professional print quality
-           model: "flux-pro",  // BEST quality model available
+       // 🔥🔥 ABSOLUTE MAXIMUM QUALITY - 2K Resolution + Advanced Prompt Engineering
+       const qualityKeywords = "extremely detailed, ultra high resolution, 8k uhd quality, razor sharp focus, professional photography, perfect studio lighting, vibrant rich colors, masterpiece quality, award-winning composition, hyper photorealistic, intricate fine details, crystal clear clarity, perfect textures, cinematic lighting, depth of field";
+       const enhancedPrompt = `${prompt}, ${qualityKeywords}`;
+       
+       const generatedImageURL = generatePollinationsImage(enhancedPrompt, {
+           width: 2048,        // 🔥🔥 2K RESOLUTION - Maximum quality
+           height: 2048,       // 🏆 ULTIMATE quality setting
+           model: "flux-pro",  // 🏆 BEST model available
            nologo: true,
-           enhance: true,      // AI prompt enhancement for better results
+           enhance: true,      // AI prompt enhancement ENABLED
        });
 
        console.log("Generated image URL:", generatedImageURL);
