@@ -139,18 +139,18 @@ const Chatbox = ({ isMenuopen }) => {
       {selectedChat && messages.length > 0 && (
         <div className="flex items-center justify-between mb-3 md:mb-4 pb-2 md:pb-3 border-b border-gray-200 dark:border-[#252525]">
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center text-white font-semibold text-sm md:text-base shrink-0">
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center text-white font-semibold text-base md:text-base shrink-0">
               {selectedChat.messages && selectedChat.messages.length > 0 
                 ? selectedChat.messages[0]?.content.charAt(0).toUpperCase() 
                 : 'C'}
             </div>
             <div className="min-w-0 flex-1">
-              <h2 className="text-sm md:text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-300 truncate">
+              <h2 className="text-base md:text-base lg:text-lg font-semibold text-gray-900 dark:text-gray-300 truncate">
                 {selectedChat.messages && selectedChat.messages.length > 0
                   ? selectedChat.messages[0]?.content.slice(0, 50)
                   : selectedChat.name || 'Chat'}
               </h2>
-              <p className="text-[10px] md:text-xs text-gray-500 dark:text-gray-500">
+              <p className="text-xs md:text-xs text-gray-500 dark:text-gray-500">
                 {messages.length} message{messages.length !== 1 ? 's' : ''}
               </p>
             </div>
@@ -171,7 +171,7 @@ const Chatbox = ({ isMenuopen }) => {
               className="w-full max-w-48 sm:max-w-56 md:max-w-68"
             />
             <p
-              className="mt-5 text-2xl sm:text-4xl md:text-6xl text-center text-gray-400
+              className="mt-5 text-3xl sm:text-4xl md:text-6xl text-center text-gray-400
         dark:text-gray-400"
             >
               Ask me anything..
@@ -217,8 +217,8 @@ const Chatbox = ({ isMenuopen }) => {
       </div>
 
       {mode === "image" && (
-        <label className="inline-flex items-center gap-2 mb-2 md:mb-3 text-xs md:text-sm mx-auto px-4">
-          <p className="text-xs md:text-sm">Published Generated Image to Community</p>
+        <label className="inline-flex items-center gap-2 mb-2 md:mb-3 text-sm md:text-sm mx-auto px-4">
+          <p className="text-sm md:text-sm">Published Generated Image to Community</p>
           <input type="checkbox" className="cursor-pointer w-4 h-4" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />
         </label>
       )}
@@ -229,12 +229,12 @@ const Chatbox = ({ isMenuopen }) => {
         onSubmit={onSubmit}
         className="bg-primary/20 dark:bg-[#1a1a1a] border border-primary 
              dark:border-[#252525] rounded-full w-full max-w-2xl 
-             p-2 md:p-3 pl-3 md:pl-4 mx-auto flex gap-2 md:gap-4 items-center"
+             p-2.5 md:p-3 pl-4 md:pl-4 mx-auto flex gap-2 md:gap-4 items-center"
       >
         <select
           onChange={(e) => setMode(e.target.value)}
           value={mode}
-          className="text-xs md:text-sm pl-2 md:pl-3 pr-1 md:pr-2 outline-none bg-transparent text-gray-900 dark:text-gray-300 cursor-pointer"
+          className="text-sm md:text-sm pl-2 md:pl-3 pr-1 md:pr-2 outline-none bg-transparent text-gray-900 dark:text-gray-300 cursor-pointer"
         >
           <option className="bg-white dark:bg-[#1a1a1a] text-gray-900 dark:text-gray-300" value="text">
             Text
@@ -248,14 +248,14 @@ const Chatbox = ({ isMenuopen }) => {
           value={prompt}
           type="text"
           placeholder="type your prompt here..."
-          className="flex-1 w-full text-xs md:text-sm outline-none bg-transparent text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-500"
+          className="flex-1 w-full text-sm md:text-sm outline-none bg-transparent text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-500"
           required
         />
-        <button disabled={loading} type="submit" className="flex-shrink-0 p-1.5 md:p-2 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] rounded-full transition-all md:hover:shadow-lg active:scale-95 cursor-pointer">
+        <button disabled={loading} type="submit" className="flex-shrink-0 p-2 md:p-2 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] rounded-full transition-all md:hover:shadow-lg active:scale-95 cursor-pointer">
           {loading ? (
-            <StopCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            <StopCircle className="w-5 h-5 md:w-5 md:h-5 text-white" />
           ) : (
-            <Send className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            <Send className="w-5 h-5 md:w-5 md:h-5 text-white" />
           )}
         </button>
       </form>

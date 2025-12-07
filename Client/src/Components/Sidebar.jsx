@@ -41,29 +41,29 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
 
       <button
       onClick={createNewChat}
-        className="flex justify-center items-center w-full py-2 mt-8 md:mt-10 
+        className="flex justify-center items-center w-full py-2.5 mt-8 md:mt-10 
              text-white bg-gradient-to-r from-[#A456F7] to-[#3D81F6] 
-             text-sm rounded-md cursor-pointer active:scale-95 transition-all duration-200
+             text-base md:text-sm rounded-md cursor-pointer active:scale-95 transition-all duration-200
              hover:shadow-lg hover:shadow-purple-500/50 dark:hover:shadow-purple-500/30"
       >
-        <span className="mr-2 text-xl">+</span>New Chat
+        <span className="mr-2 text-xl md:text-2xl">+</span>New Chat
       </button>
 
       <div
-        className="flex items-center gap-2 p-2 md:p-3 mt-4 border border-gray-300 
+        className="flex items-center gap-2 p-2.5 md:p-3 mt-4 border border-gray-300 
              dark:border-[#252525] rounded-md bg-white dark:bg-[#1a1a1a] transition-colors duration-200"
       >
-        <Search className="w-3.5 md:w-4 text-gray-900 dark:text-gray-400" />
+        <Search className="w-4 md:w-4 text-gray-900 dark:text-gray-400" />
         <input
           onChange={(e) => setSearch(e.target.value)}
           value={search}
           type="text"
           placeholder="Search conversations"
-          className="text-xs md:text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none bg-transparent w-full text-gray-900 dark:text-gray-300"
+          className="text-sm md:text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none bg-transparent w-full text-gray-900 dark:text-gray-300"
         />
       </div>
 
-      {chats && chats.length > 0 && <p className="mt-3 md:mt-4 text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">Recent Chats</p>}
+      {chats && chats.length > 0 && <p className="mt-3 md:mt-4 text-sm md:text-sm font-medium text-gray-600 dark:text-gray-400">Recent Chats</p>}
       <div className="flex-1 overflow-y-scroll mt-2 md:mt-3 text-sm space-y-2 md:space-y-3">
         {chats && chats
           .filter((chat) =>
@@ -81,18 +81,18 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
              flex justify-between items-center gap-2 group md:hover:bg-gray-100 md:dark:hover:bg-[#1f1f1f] active:bg-gray-100 dark:active:bg-[#1f1f1f] transition-all duration-200`}
             >
               <div onClick={()=> {navigate('/'); setSelectedChat(chat); setIsMenuOpen(false)}} className="flex-1 min-w-0">
-                <p className="truncate w-full text-xs md:text-sm text-gray-900 dark:text-gray-300">
+                <p className="truncate w-full text-sm md:text-sm text-gray-900 dark:text-gray-300">
                   {chat.messages && chat.messages.length > 0
                     ? chat.messages[0]?.content.slice(0, 28)
                     : chat.name}
                 </p>
-                <p className="text-[10px] md:text-xs text-gray-500 dark:text-gray-500 mt-0.5">
+                <p className="text-xs md:text-xs text-gray-500 dark:text-gray-500 mt-0.5">
                   {moment(chat.updatedAt).fromNow()}</p>
               </div>
 
               <Trash2
                 className="md:hidden md:group-hover:block shrink-0
-              w-3.5 h-3.5 md:w-4 md:h-4 cursor-pointer text-gray-900 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+              w-4 h-4 md:w-4 md:h-4 cursor-pointer text-gray-900 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                 onClick={(e) => toast.promise(deleteChat(e, chat._id), {loading:
                   'Deleting chat...'
                 })}
@@ -105,16 +105,16 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
       <div onClick={()=> {navigate("/community"); setIsMenuOpen(false)}} className="flex items-center gap-2 p-3 mt-4 border border-gray-300 
              dark:border-[#252525] rounded-md cursor-pointer 
              transition-all duration-200 bg-white dark:bg-[#1a1a1a] md:hover:bg-gray-50 md:dark:hover:bg-[#1f1f1f] active:bg-gray-100 dark:active:bg-[#1f1f1f]">
-        <Images className="w-4 md:w-4.5 text-gray-900 dark:text-gray-400" />
-        <div className="flex flex-col text-xs md:text-sm">
+        <Images className="w-5 md:w-4.5 text-gray-900 dark:text-gray-400" />
+        <div className="flex flex-col text-sm md:text-sm">
           <p className="dark:text-gray-300">Community Images</p>
         </div>
       </div>
 
-      <div  className="flex items-center justify-between gap-2 p-2 md:p-3 mt-3 md:mt-4 border border-gray-300 
+      <div  className="flex items-center justify-between gap-2 p-2.5 md:p-3 mt-3 md:mt-4 border border-gray-300 
              dark:border-[#252525] rounded-md bg-white dark:bg-[#1a1a1a] transition-colors duration-200">
-        <div className="flex items-center gap-2 text-xs md:text-sm">
-          {theme === "dark" ? <Moon className="w-3.5 md:w-4 text-gray-900 dark:text-gray-400" /> : <Sun className="w-3.5 md:w-4 text-gray-900 dark:text-gray-400" />}
+        <div className="flex items-center gap-2 text-sm md:text-sm">
+          {theme === "dark" ? <Moon className="w-4 md:w-4 text-gray-900 dark:text-gray-400" /> : <Sun className="w-4 md:w-4 text-gray-900 dark:text-gray-400" />}
           <p className="dark:text-gray-300">Dark mode</p>
         </div>
         <label className="relative inline-flex cursor-pointer">
@@ -128,16 +128,16 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
 
       {/* {user account} */}
 
-      <div  className="flex items-center justify-between gap-2 md:gap-3 p-2 md:p-3 mt-3 md:mt-4 border border-gray-300 
+      <div  className="flex items-center justify-between gap-2 md:gap-3 p-2.5 md:p-3 mt-3 md:mt-4 border border-gray-300 
              dark:border-[#252525] rounded-md group bg-white dark:bg-[#1a1a1a]
              md:hover:bg-gray-50 md:dark:hover:bg-[#1f1f1f] transition-all duration-200">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
-          <div className="w-6 h-6 md:w-7 md:h-7 rounded-full shrink-0 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center">
-            <User className="w-4 h-4 md:w-4.5 md:h-4.5 text-white" />
+          <div className="w-7 h-7 md:w-7 md:h-7 rounded-full shrink-0 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center">
+            <User className="w-4.5 h-4.5 md:w-4.5 md:h-4.5 text-white" />
           </div>
-          <p className="text-xs md:text-sm text-gray-900 dark:text-gray-300 truncate">{user ? user.name : 'login account'}</p>
+          <p className="text-sm md:text-sm text-gray-900 dark:text-gray-300 truncate">{user ? user.name : 'login account'}</p>
         </div>
-        {user && <LogOut onClick={logout} className="h-4 md:h-5 cursor-pointer md:hidden md:group-hover:block shrink-0 text-gray-900 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors" /> }
+        {user && <LogOut onClick={logout} className="h-5 md:h-5 cursor-pointer md:hidden md:group-hover:block shrink-0 text-gray-900 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors" /> }
       </div>
 
       <X onClick={()=> setIsMenuOpen(false)} className="absolute top-4 right-4 w-6 h-6 cursor-pointer md:hidden text-gray-900 dark:text-gray-400 active:scale-90 transition-transform hover:text-red-500 dark:hover:text-red-400" />

@@ -30,7 +30,7 @@ const Community = () => {
   if(loading) return <Loading/>
   return (
     <div className='p-4 md:p-6 pt-16 md:pt-12 xl:px-12 2xl:px-20 w-full mx-auto h-full overflow-y-scroll'>
-  <h2 className='text-lg md:text-xl font-semibold mb-4 md:mb-6 text-gray-800 dark:text-purple-100'>
+  <h2 className='text-xl md:text-xl font-semibold mb-4 md:mb-6 text-gray-800 dark:text-purple-100'>
     Community Images
   </h2>
 
@@ -53,14 +53,14 @@ const Community = () => {
                        md:group-hover:scale-105 transition-transform 
                        duration-300 ease-in-out'
           />
-          <p className='absolute bottom-0 right-0 text-xs bg-black/50 backdrop-blur 
-             text-white px-3 py-1 rounded-tl-xl max-md:opacity-100
+          <p className='absolute bottom-0 right-0 text-sm md:text-xs bg-black/50 backdrop-blur 
+             text-white px-3 py-1.5 md:py-1 rounded-tl-xl max-md:opacity-100
              md:opacity-0 md:group-hover:opacity-100 transition duration-300'>Created by {item.userName}</p>
         </a>
       ))}
     </div>
       ) : (
-        <p className='text-center text-gray-600 dark:text-purple-200 mt-10'>no images found</p>
+        <p className='text-center text-base md:text-base text-gray-600 dark:text-purple-200 mt-10'>no images found</p>
       )}
     </div>
   )

@@ -39,7 +39,7 @@ const App = () => {
   return (
     <>
     <Toaster/>
-    {!isMenuopen && <Menu className="absolute top-4 left-4 w-7 h-7 cursor-pointer md:hidden text-gray-900 dark:text-white z-20 drop-shadow-sm active:scale-90 transition-transform" onClick={()=> setIsMenuOpen(true)} />}
+    {!isMenuopen && <Menu className="absolute top-4 left-4 w-8 h-8 cursor-pointer md:hidden text-gray-900 dark:text-white z-20 drop-shadow-sm active:scale-90 transition-transform" onClick={()=> setIsMenuOpen(true)} />}
 
     {user ? (
       <div className="bg-gray-50 dark:bg-[#0f0f0f]
