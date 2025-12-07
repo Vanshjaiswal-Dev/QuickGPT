@@ -6,6 +6,7 @@ import { useUIStore } from "../store/uiStore";
 import axios from "../store/axiosInstance";
 import Message from "./Message";
 import toast from "react-hot-toast";
+import { ArrowUp, StopCircle, Send } from 'lucide-react';
 
 const Chatbox = ({ isMenuopen }) => {
 
@@ -210,20 +211,7 @@ const Chatbox = ({ isMenuopen }) => {
                      transition-all duration-300 md:hover:shadow-xl md:hover:scale-110 active:scale-95 z-50"
             aria-label="Scroll to top"
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-5 w-5" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M5 10l7-7m0 0l7 7m-7-7v18" 
-              />
-            </svg>
+            <ArrowUp className="h-5 w-5" />
           </button>
         )}
       </div>
@@ -263,12 +251,12 @@ const Chatbox = ({ isMenuopen }) => {
           className="flex-1 w-full text-xs md:text-sm outline-none bg-transparent text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
           required
         />
-        <button disabled={loading} type="submit" className="flex-shrink-0">
-          <img
-            src={loading ? assets.stop_icon : assets.send_icon}
-            className="w-7 md:w-8 cursor-pointer"
-            alt={loading ? "Stop" : "Send"}
-          />
+        <button disabled={loading} type="submit" className="flex-shrink-0 p-1.5 md:p-2 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] rounded-full transition-all md:hover:shadow-lg active:scale-95 cursor-pointer">
+          {loading ? (
+            <StopCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
+          ) : (
+            <Send className="w-4 h-4 md:w-5 md:h-5 text-white" />
+          )}
         </button>
       </form>
     </div>

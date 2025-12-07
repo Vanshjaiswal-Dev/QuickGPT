@@ -10,6 +10,7 @@ import { useAuthStore } from "./store/authStore";
 import { useChatStore } from "./store/chatStore";
 import Login from "./pages/Login";
 import {Toaster} from 'react-hot-toast';
+import { Menu } from 'lucide-react';
 
 const App = () => {
 
@@ -38,8 +39,7 @@ const App = () => {
   return (
     <>
     <Toaster/>
-    {!isMenuopen && <img src={assets.menu_icon} className="absolute top-4 left-4
-    w-7 h-7 cursor-pointer md:hidden invert dark:invert-0 z-20 drop-shadow-sm active:scale-90 transition-transform" onClick={()=> setIsMenuOpen(true)} />}
+    {!isMenuopen && <Menu className="absolute top-4 left-4 w-7 h-7 cursor-pointer md:hidden text-gray-900 dark:text-white z-20 drop-shadow-sm active:scale-90 transition-transform" onClick={()=> setIsMenuOpen(true)} />}
 
     {user ? (
       <div className="bg-gradient-to-b from-gray-50 to-white dark:from-[#242124] dark:to-[#000000]

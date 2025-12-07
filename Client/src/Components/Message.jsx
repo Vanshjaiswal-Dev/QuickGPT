@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import moment from "moment";
 import Markdown from "react-markdown";
 import Prism from "prismjs";
+import { User, Bot } from 'lucide-react';
 
 const Message = ({ message }) => {
 
@@ -27,14 +28,20 @@ const Message = ({ message }) => {
             </span>
           </div>
 
-          <img src={assets.user_icon} alt="" className="w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0" />
+          <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center">
+            <User className="w-4 h-4 md:w-5 md:h-5 text-white" />
+          </div>
         </div>
       ) : (
-        <div
-          className="inline-flex flex-col gap-2 p-2 px-3 md:px-4 max-w-[90%] md:max-w-2xl bg-primary/20 
+        <div className="flex items-start my-4 gap-2">
+          <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+            <Bot className="w-4 h-4 md:w-5 md:h-5 text-white" />
+          </div>
+          <div
+            className="flex flex-col gap-2 p-2 px-3 md:px-4 max-w-[90%] md:max-w-2xl bg-primary/20 
                 dark:bg-[#57317C]/30 border border-gray-200 dark:border-[#80609F]/30 
-                rounded-md my-4"
-        >
+                rounded-md"
+          >
           {message.isImage ? (
             <>
               <img
@@ -50,6 +57,7 @@ const Message = ({ message }) => {
           )}
 
           <span className="text-xs text-gray-400 dark:text-[#B1A6C0]">{moment(message.timestamp).fromNow()}</span>
+          </div>
         </div>
       )}
     </div>

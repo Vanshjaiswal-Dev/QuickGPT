@@ -7,6 +7,7 @@ import { assets } from "../assets/assets.js";
 import moment from "moment";
 import toast from "react-hot-toast";
 import Loading from "../pages/Loading.jsx";
+import { Search, Trash2, Images, Sun, Moon, User, LogOut, X } from 'lucide-react';
 
 const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
         className="flex items-center gap-2 p-2 md:p-3 mt-4 border border-gray-300 
              dark:border-white/20 rounded-md bg-white dark:bg-transparent"
       >
-        <img src={assets.search_icon} className="w-3.5 md:w-4 invert-0 dark:invert brightness-0 dark:brightness-100" alt="Search" />
+        <Search className="w-3.5 md:w-4 text-gray-900 dark:text-white" />
         <input
           onChange={(e) => setSearch(e.target.value)}
           value={search}
@@ -88,11 +89,9 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
                   {moment(chat.updatedAt).fromNow()}</p>
               </div>
 
-              <img
-                src={assets.bin_icon}
+              <Trash2
                 className="md:hidden md:group-hover:block shrink-0
-              w-3.5 h-3.5 md:w-4 md:h-4 cursor-pointer invert-0 dark:invert brightness-0 dark:brightness-100"
-                alt="Delete"
+              w-3.5 h-3.5 md:w-4 md:h-4 cursor-pointer text-gray-900 dark:text-white"
                 onClick={(e) => toast.promise(deleteChat(e, chat._id), {loading:
                   'Deleting chat...'
                 })}
@@ -105,7 +104,7 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
       <div onClick={()=> {navigate("/community"); setIsMenuOpen(false)}} className="flex items-center gap-2 p-3 mt-4 border border-gray-300 
              dark:border-white/15 rounded-md cursor-pointer 
              transition-all bg-white dark:bg-transparent md:hover:bg-gray-50 md:dark:hover:bg-white/5 active:bg-gray-100 dark:active:bg-white/10">
-        <img src={assets.gallery_icon} className="w-4 md:w-4.5 invert-0 dark:invert brightness-0 dark:brightness-100" alt="Gallery" />
+        <Images className="w-4 md:w-4.5 text-gray-900 dark:text-white" />
         <div className="flex flex-col text-xs md:text-sm">
           <p>Community Images</p>
         </div>
@@ -114,7 +113,7 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
       <div  className="flex items-center justify-between gap-2 p-2 md:p-3 mt-3 md:mt-4 border border-gray-300 
              dark:border-white/15 rounded-md bg-white dark:bg-transparent">
         <div className="flex items-center gap-2 text-xs md:text-sm">
-          <img src={assets.theme_icon} className="w-3.5 md:w-4 invert-0 dark:invert brightness-0 dark:brightness-100" alt="Theme" />
+          {theme === "dark" ? <Moon className="w-3.5 md:w-4 text-gray-900 dark:text-white" /> : <Sun className="w-3.5 md:w-4 text-gray-900 dark:text-white" />}
           <p>Dark mode</p>
         </div>
         <label className="relative inline-flex cursor-pointer">
@@ -132,14 +131,15 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
              dark:border-white/15 rounded-md group bg-white dark:bg-transparent
              md:hover:bg-gray-50 md:dark:hover:bg-white/5 transition-colors">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
-          <img src={assets.user_icon} className="w-6 h-6 md:w-7 md:h-7 rounded-full shrink-0" alt="User" />
+          <div className="w-6 h-6 md:w-7 md:h-7 rounded-full shrink-0 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center">
+            <User className="w-4 h-4 md:w-4.5 md:h-4.5 text-white" />
+          </div>
           <p className="text-xs md:text-sm text-gray-900 dark:text-primary truncate">{user ? user.name : 'login account'}</p>
         </div>
-        {user && <img onClick={logout} src={assets.logout_icon} className="h-4 md:h-5 cursor-pointer md:hidden md:group-hover:block shrink-0
-          invert-0 dark:invert brightness-0 dark:brightness-100"  alt="Logout" /> }
+        {user && <LogOut onClick={logout} className="h-4 md:h-5 cursor-pointer md:hidden md:group-hover:block shrink-0 text-gray-900 dark:text-white" /> }
       </div>
 
-      <img onClick={()=> setIsMenuOpen(false)} src={assets.close_icon} className="absolute top-4 right-4 w-6 h-6 cursor-pointer md:hidden invert-0 dark:invert brightness-0 dark:brightness-100 active:scale-90 transition-transform" alt="Close menu" />
+      <X onClick={()=> setIsMenuOpen(false)} className="absolute top-4 right-4 w-6 h-6 cursor-pointer md:hidden text-gray-900 dark:text-white active:scale-90 transition-transform" />
     </div>
   );
 };
