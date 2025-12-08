@@ -5,11 +5,11 @@ import toast from 'react-hot-toast';
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
 
 export const useChatStore = create((set, get) => ({
-  // State
+  
   chats: [],
   selectedChat: null,
 
-  // Actions
+  
   setChats: (chats) => set({ chats }),
   
   setSelectedChat: (chat) => set({ selectedChat: chat }),
@@ -71,7 +71,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  // Update messages in a specific chat
+  
   updateChatMessages: (chatId, newMessages) => {
     set((state) => ({
       chats: state.chats.map(chat => 
