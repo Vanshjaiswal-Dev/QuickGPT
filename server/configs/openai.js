@@ -6,7 +6,6 @@ import {OpenAI} from "openai";
 let openai;
 
 if (process.env.GROQ_API_KEY) {
-    // GROQ - Fastest & Free with no rate limits
     console.log("✅ Using GROQ AI (Free & Fast)");
     openai = new OpenAI({
         apiKey: process.env.GROQ_API_KEY,
@@ -26,7 +25,7 @@ if (process.env.GROQ_API_KEY) {
         baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
     });
 } else {
-    console.error("❌ No AI API key found! Add GROQ_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY to .env");
+    console.error(" No AI API key found! Add GROQ_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY to .env");
 }
 
 export default openai;
