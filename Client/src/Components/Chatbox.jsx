@@ -59,33 +59,116 @@ const Chatbox = ({ isMenuopen }) => {
       
       setMessages((prev) => [...prev, userMessage]);
       
-      const {data} = await axios.post(`/api/message/${mode}`, {
-        chatId: selectedChat._id, 
-        prompt: promptCopy, 
-        isPublished
-      }, {
-        headers: {Authorization: token}
-      }) 
-
-      if(data.success){
-        // Update local state with AI reply
-        const updatedMessages = [...messages, userMessage, data.reply];
-        setMessages(updatedMessages);
+      if (mode === "text") {
+        // AI message placeholder
+        const aiMessage = {
+          role: "assistant",
+          content: "",
+          timestamp: Date.now(),
+          isImage: false,
+          isStreaming: true
+        };
         
-        // Update chat messages in store (persists across navigation)
-        updateChatMessages(selectedChat._id, updatedMessages);
-      }
-      else{
-        toast.error(data.message);
-        setPrompt(promptCopy); // Restore prompt on error
+        setMessages((prev) => [...prev, aiMessage]);
+
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/message/stream`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+          },
+          body: JSON.stringify({ chatId: selectedChat._id, prompt: promptCopy })
+        });
+
+        if (!response.ok) {
+           if (response.status === 429) {
+             throw new Error("Rate limit reached! Please wait before sending another message.");
+           }
+           const errorData = await response.json().catch(() => ({}));
+           throw new Error(errorData.message || "Failed to send message");
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
+        let accumulatedResponse = "";
+
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split("\n\n");
+            
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const dataStr = line.replace("data: ", "");
+                if (dataStr === "[DONE]") {
+                  done = true;
+                  break;
+                }
+                try {
+                  const data = JSON.parse(dataStr);
+                  if (data.error) {
+                    throw new Error(data.error);
+                  }
+                  if (data.content) {
+                    accumulatedResponse += data.content;
+                    setMessages(prev => {
+                      const newMsgs = [...prev];
+                      newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], content: accumulatedResponse };
+                      return newMsgs;
+                    });
+                  }
+                } catch (e) {
+                  if (e.message !== "Unexpected end of JSON input" && !e.message.startsWith("Unexpected token")) {
+                    throw e; // rethrow logic errors like rate limits
+                  }
+                  // Ignore JSON parse errors from partial chunks
+                }
+              }
+            }
+          }
+        }
+
+        // Finalize stream
+        setMessages(prev => {
+          const newMsgs = [...prev];
+          newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], isStreaming: false };
+          updateChatMessages(selectedChat._id, newMsgs);
+          return newMsgs;
+        });
+
+      } else {
+        const {data} = await axios.post(`/api/message/${mode}`, {
+          chatId: selectedChat._id, 
+          prompt: promptCopy, 
+          isPublished
+        }, {
+          headers: {Authorization: token}
+        }) 
+
+        if(data.success){
+          // Update local state with AI reply
+          const updatedMessages = [...messages, userMessage, data.reply];
+          setMessages(updatedMessages);
+          
+          // Update chat messages in store (persists across navigation)
+          updateChatMessages(selectedChat._id, updatedMessages);
+        }
+        else{
+          toast.error(data.message);
+          setPrompt(promptCopy); // Restore prompt on error
+          setMessages(prev => prev.slice(0, -1)); // Remove the user message optimistically added
+        }
       }
     } catch (error) {
       console.error('Message send error:', error);
       
-      // Check if it's a rate limit error (429)
-      if (error.response?.status === 429 || error.response?.data?.rateLimitError) {
+      // Check if it's a rate limit error
+      if (error.response?.status === 429 || error.response?.data?.rateLimitError || error.message?.includes('Rate limit')) {
         const resetTime = error.response?.data?.resetTime || 60;
-        toast.error(`⏳ Rate limit reached! Please wait ${resetTime} seconds before sending another message.`, {
+        toast.error(`⏳ Rate limit reached! Please wait a moment before sending another message.`, {
           duration: 6000,
           icon: "⚠️"
         });
@@ -93,6 +176,16 @@ const Chatbox = ({ isMenuopen }) => {
         toast.error(error.response?.data?.message || error.message || "Failed to send message");
       }
       setPrompt(promptCopy); // Restore prompt on error
+      
+      // Clean up optimistically added messages if failed
+      setMessages(prev => {
+         if (prev.length > 0 && prev[prev.length - 1].role === 'assistant' && prev[prev.length - 1].content === "") {
+            return prev.slice(0, -2);
+         } else if (prev.length > 0 && prev[prev.length - 1].role === 'user') {
+            return prev.slice(0, -1);
+         }
+         return prev;
+      });
     } finally {
       setLoading(false);
     }

@@ -145,7 +145,7 @@ const Message = ({ message }) => {
             </>
           ) : (
             <div className="text-sm md:text-sm text-gray-900 dark:text-gray-300 reset-tw break-words leading-relaxed">
-              <Markdown>{message.content}</Markdown>
+              <Markdown>{message.content + (message.isStreaming ? ' ▋' : '')}</Markdown>
             </div>
           )}
 
