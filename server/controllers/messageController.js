@@ -26,14 +26,21 @@ export const textMessageController = async (req, res) => {
       ? "gpt-3.5-turbo"              // OpenAI's model
       : "gemini-2.0-flash-exp";           // Gemini's model
 
+    // Get the last 20 text messages for context
+    const chatHistory = chat.messages
+      .filter((msg) => !msg.isImage)
+      .slice(-20)
+      .map((msg) => ({
+        role: msg.role === 'assistant' ? 'assistant' : 'user',
+        content: msg.content,
+      }));
+
+    // Ensure the current prompt is at the end (it was just pushed)
+    // Actually, it's already in chat.messages because we pushed it above.
+    
     const { choices } = await openai.chat.completions.create({
       model: model,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      messages: chatHistory.length > 0 ? chatHistory : [{ role: "user", content: prompt }],
     });
 
     const reply = {

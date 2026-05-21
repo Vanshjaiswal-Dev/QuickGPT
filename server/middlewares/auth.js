@@ -3,6 +3,9 @@ import User from "../models/User.js";
 
 export const protect = async (req, res, next) => {
   let token = req.headers.authorization;
+  if (token && token.startsWith('Bearer ')) {
+    token = token.slice(7);
+  }
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Not authorized, no token" });

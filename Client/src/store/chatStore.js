@@ -16,7 +16,7 @@ export const useChatStore = create((set, get) => ({
 
   fetchUsersChats: async (token) => {
     try {
-      const { data } = await axios.get('/api/chat/get', {
+      const { data } = await axios.get('/api/chat', {
         headers: { Authorization: token }
       });
       if (data.success) {
@@ -40,7 +40,7 @@ export const useChatStore = create((set, get) => ({
       if (navigate) {
         navigate('/');
       }
-      await axios.get('/api/chat/create', {
+      await axios.post('/api/chat', {}, {
         headers: { Authorization: token }
       });
       await get().fetchUsersChats(token);
@@ -54,10 +54,9 @@ export const useChatStore = create((set, get) => ({
       const confirm = window.confirm("Are you sure you want to delete this chat?");
       if (!confirm) return;
       
-      const { data } = await axios.post('/api/chat/delete', 
-        { chatId }, 
-        { headers: { Authorization: token } }
-      );
+      const { data } = await axios.delete(`/api/chat/${chatId}`, {
+        headers: { Authorization: token }
+      });
       
       if (data.success) {
         set((state) => ({

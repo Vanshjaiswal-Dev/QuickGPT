@@ -18,15 +18,15 @@ export const registerUser = async (req, res, next) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.json({ success: false, message: "User already exists" });
+      return res.status(409).json({ success: false, message: "User already exists" });
     }
 
     const user = await User.create({name, email, password})
     const token = generateToken(user._id)
-    return res.json({success: true, token})
+    return res.status(201).json({success: true, token})
    } catch(error){
         console.error("Register error:", error);
-        return res.json({success: false, message: error.message})
+        return res.status(500).json({success: false, message: error.message})
    }
 
 }
@@ -46,10 +46,10 @@ export const loginUser = async (req, res, next) => {
       }
     }
 
-    return res.json({ success: false, message: "Invalid email or password" });
+    return res.status(401).json({ success: false, message: "Invalid email or password" });
   } catch (error) {
     console.error("Login error:", error);
-    return res.json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 }
 
@@ -60,7 +60,7 @@ export const getUser = async (req, res, next) => {
     return res.json({ success: true, user });
   } catch (error) {
     console.error("Get user error:", error);
-    return res.json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 }
 
@@ -87,7 +87,7 @@ export const getPublishedImages = async (req, res) => {
 
     res.json({ success: true, images: publishedImagesMessages.reverse()})
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 }
 
