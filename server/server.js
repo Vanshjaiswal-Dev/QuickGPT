@@ -26,6 +26,15 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 
+// Session & Passport (required for Google OAuth callback flow)
+app.use(session({
+  secret: process.env.JWT_SECRET || 'quickgpt-secret',
+  resave: false,
+  saveUninitialized: false,
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
 // Routes
 app.get('/', (req, res) => res.send('Server is Live!'))
 
