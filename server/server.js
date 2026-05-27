@@ -7,6 +7,7 @@ import chatRouter from './routes/chatRoutes.js'
 import messageRouter from './routes/messageRoutes.js'
 import authRouter from './routes/authRoutes.js'
 import streamRouter from './routes/streamRoutes.js'
+import analyticsRouter from './routes/analyticsRoutes.js'
 import passport from 'passport'
 import session from 'express-session'
 import './configs/passport.js'
@@ -49,6 +50,7 @@ app.use('/api/chat', chatRouter)
 app.use('/api/message/stream', streamRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/analytics', analyticsRouter)
 
 // 404 handler
 app.use((req, res) => {

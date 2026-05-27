@@ -7,6 +7,8 @@ import axios from "../store/axiosInstance";
 import Message from "./Message";
 import toast from "react-hot-toast";
 import { ArrowUp, StopCircle, Send } from 'lucide-react';
+import VoiceInput from "./VoiceInput";
+import PromptTemplates from "./PromptTemplates";
 
 const Chatbox = ({ isMenuopen }) => {
 
@@ -269,6 +271,7 @@ const Chatbox = ({ isMenuopen }) => {
             >
               Ask me anything..
             </p>
+            <PromptTemplates onSelectTemplate={setPrompt} />
           </div>
         )}
 
@@ -344,6 +347,7 @@ const Chatbox = ({ isMenuopen }) => {
           className="flex-1 w-full text-sm md:text-sm outline-none bg-transparent text-gray-900 dark:text-gray-300 placeholder:text-gray-500 dark:placeholder:text-gray-500"
           required
         />
+        <VoiceInput prompt={prompt} setPrompt={setPrompt} disabled={loading} />
         <button disabled={loading} type="submit" className="flex-shrink-0 p-2 md:p-2 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] rounded-full transition-all md:hover:shadow-lg active:scale-95 cursor-pointer">
           {loading ? (
             <StopCircle className="w-5 h-5 md:w-5 md:h-5 text-white" />

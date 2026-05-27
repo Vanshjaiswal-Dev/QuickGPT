@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { assets } from "../assets/assets";
-import moment from "moment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 import Markdown from "react-markdown";
 import Prism from "prismjs";
 import { User, Bot, X } from 'lucide-react';
@@ -47,7 +49,7 @@ const Message = ({ message }) => {
             <p className="text-sm md:text-sm text-gray-900 dark:text-gray-300 break-words leading-relaxed">{message.content}</p>
 
             <span className="text-xs text-gray-400 dark:text-gray-500">
-              {moment(message.timestamp).fromNow()}
+              {dayjs(message.timestamp).fromNow()}
             </span>
           </div>
 
@@ -149,7 +151,7 @@ const Message = ({ message }) => {
             </div>
           )}
 
-          <span className="text-xs text-gray-400 dark:text-gray-500">{moment(message.timestamp).fromNow()}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">{dayjs(message.timestamp).fromNow()}</span>
           </div>
         </div>
       )}

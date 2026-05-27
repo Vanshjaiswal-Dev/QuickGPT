@@ -4,10 +4,12 @@ import { useChatStore } from "../store/chatStore";
 import { useAuthStore } from "../store/authStore";
 import { useUIStore } from "../store/uiStore";
 import { assets } from "../assets/assets.js";
-import moment from "moment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 import toast from "react-hot-toast";
 import Loading from "../pages/Loading.jsx";
-import { Search, Trash2, Images, Sun, Moon, User, LogOut, X } from 'lucide-react';
+import { Search, Trash2, Images, Sun, Moon, User, LogOut, X, Pin, Edit2, Download, BarChart3 } from 'lucide-react';
 
 const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
   const navigate = useNavigate();
@@ -78,25 +80,60 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
               key={chat._id}
               className={`p-2 md:p-2 px-3 md:px-4 ${selectedChat?._id === chat._id ? 'bg-purple-100 dark:bg-[#252525] border-purple-300 dark:border-[#3a3a3a]' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-[#252525]'} border 
              rounded-md cursor-pointer 
-             flex justify-between items-center gap-2 group md:hover:bg-gray-100 md:dark:hover:bg-[#1f1f1f] active:bg-gray-100 dark:active:bg-[#1f1f1f] transition-all duration-200`}
+             flex justify-between items-start gap-2 group md:hover:bg-gray-100 md:dark:hover:bg-[#1f1f1f] active:bg-gray-100 dark:active:bg-[#1f1f1f] transition-all duration-200`}
             >
-              <div onClick={()=> {navigate('/'); setSelectedChat(chat); setIsMenuOpen(false)}} className="flex-1 min-w-0">
-                <p className="truncate w-full text-sm md:text-sm text-gray-900 dark:text-gray-300">
-                  {chat.messages && chat.messages.length > 0
-                    ? chat.messages[0]?.content.slice(0, 28)
-                    : chat.name}
-                </p>
-                <p className="text-xs md:text-xs text-gray-500 dark:text-gray-500 mt-0.5">
-                  {moment(chat.updatedAt).fromNow()}</p>
+              <div onClick={()=> {navigate('/'); setSelectedChat(chat); setIsMenuOpen(false)}} className="flex-1 min-w-0 flex items-center gap-1.5">
+                {chat.isPinned && <Pin className="w-3 h-3 text-purple-500 shrink-0" fill="currentColor" />}
+                <div className="flex-1 min-w-0">
+                  <p className="truncate w-full text-sm md:text-sm text-gray-900 dark:text-gray-300">
+                    {chat.customName || (chat.messages && chat.messages.length > 0
+                      ? chat.messages[0]?.content.slice(0, 28)
+                      : chat.name)}
+                  </p>
+                  <p className="text-xs md:text-xs text-gray-500 dark:text-gray-500 mt-0.5">
+                    {dayjs(chat.updatedAt).fromNow()}
+                  </p>
+                </div>
               </div>
 
-              <Trash2
-                className="md:hidden md:group-hover:block shrink-0
-              w-4 h-4 md:w-4 md:h-4 cursor-pointer text-gray-900 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                onClick={(e) => toast.promise(deleteChat(e, chat._id), {loading:
-                  'Deleting chat...'
-                })}
-              />
+              <div className="flex flex-col md:flex-row items-center gap-2 md:hidden md:group-hover:flex shrink-0">
+                <Edit2
+                  className="w-4 h-4 cursor-pointer text-gray-900 dark:text-gray-400 hover:text-purple-500 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newName = prompt("Enter new name for this chat:", chat.customName || chat.name);
+                    if (newName) useChatStore.getState().renameChat(chat._id, newName, token);
+                  }}
+                  title="Rename"
+                />
+                <Pin
+                  className={`w-4 h-4 cursor-pointer transition-colors ${chat.isPinned ? 'text-purple-500' : 'text-gray-900 dark:text-gray-400 hover:text-purple-500'}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    useChatStore.getState().pinChat(chat._id, !chat.isPinned, token);
+                  }}
+                  title={chat.isPinned ? "Unpin" : "Pin"}
+                />
+                <Download
+                  className="w-4 h-4 cursor-pointer text-gray-900 dark:text-gray-400 hover:text-blue-500 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const textContent = chat.messages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join("\n\n");
+                    const blob = new Blob([textContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${chat.customName || 'Chat_Export'}.txt`;
+                    a.click();
+                  }}
+                  title="Export"
+                />
+                <Trash2
+                  className="w-4 h-4 cursor-pointer text-gray-900 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                  onClick={(e) => toast.promise(deleteChat(e, chat._id), {loading: 'Deleting chat...'})}
+                  title="Delete"
+                />
+              </div>
             </div>
           ))}
       </div>
@@ -108,6 +145,15 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
         <Images className="w-5 md:w-4.5 text-gray-900 dark:text-gray-400" />
         <div className="flex flex-col text-sm md:text-sm">
           <p className="dark:text-gray-300">Community Images</p>
+        </div>
+      </div>
+
+      <div onClick={()=> {navigate("/dashboard"); setIsMenuOpen(false)}} className="flex items-center gap-2 p-3 mt-3 border border-gray-300 
+             dark:border-[#252525] rounded-md cursor-pointer 
+             transition-all duration-200 bg-white dark:bg-[#1a1a1a] md:hover:bg-gray-50 md:dark:hover:bg-[#1f1f1f] active:bg-gray-100 dark:active:bg-[#1f1f1f]">
+        <BarChart3 className="w-5 md:w-4.5 text-gray-900 dark:text-gray-400" />
+        <div className="flex flex-col text-sm md:text-sm">
+          <p className="dark:text-gray-300">Dashboard</p>
         </div>
       </div>
 

@@ -4,6 +4,8 @@ const ChatSchema = new mongoose.Schema({
   userId: { type: String, ref: 'User', required: true },
   userName: { type: String, required: true },
   name: { type: String, required: true },
+  customName: { type: String, default: null },
+  isPinned: { type: Boolean, default: false },
   messages: [
     {
       isImage: { type: Boolean, required: true },

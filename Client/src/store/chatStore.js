@@ -84,5 +84,55 @@ export const useChatStore = create((set, get) => ({
     }));
   },
 
+  renameChat: async (chatId, newName, token) => {
+    try {
+      const { data } = await axios.put(`/api/chat/${chatId}/rename`, { customName: newName }, {
+        headers: { Authorization: token }
+      });
+      if (data.success) {
+        set((state) => ({
+          chats: state.chats.map(chat => 
+            chat._id === chatId ? { ...chat, customName: newName } : chat
+          ),
+          selectedChat: state.selectedChat?._id === chatId 
+            ? { ...state.selectedChat, customName: newName } 
+            : state.selectedChat
+        }));
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  },
+
+  pinChat: async (chatId, isPinned, token) => {
+    try {
+      const { data } = await axios.put(`/api/chat/${chatId}/pin`, { isPinned }, {
+        headers: { Authorization: token }
+      });
+      if (data.success) {
+        set((state) => {
+          const newChats = state.chats.map(chat => 
+            chat._id === chatId ? { ...chat, isPinned } : chat
+          );
+          newChats.sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            return new Date(b.updatedAt) - new Date(a.updatedAt);
+          });
+          return {
+            chats: newChats,
+            selectedChat: state.selectedChat?._id === chatId 
+              ? { ...state.selectedChat, isPinned } 
+              : state.selectedChat
+          };
+        });
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  },
+
   clearChats: () => set({ chats: [], selectedChat: null })
 }));

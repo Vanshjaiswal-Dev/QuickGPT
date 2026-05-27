@@ -1,241 +1,76 @@
-# 🚀 QuickGPT
+# QuickGPT
 
----
+QuickGPT is a modern, full-stack AI chat application allowing users to interact with multiple AI models in real-time. It features voice input, image generation, streaming text responses, chat management (pinning, renaming, exporting), and an analytics dashboard.
 
-## ✨ Overview
+![QuickGPT Screenshot](./Client/src/assets/logo_full.png)
 
-**QuickGPT** is a modern, full-stack AI chat application that brings the power of artificial intelligence to your fingertips. Built with cutting-edge technologies, it offers seamless conversational AI experiences and stunning image generation capabilities, all wrapped in a beautiful, responsive interface.
+## Features
 
-Whether you're looking to have intelligent conversations, generate creative images with AI, or explore a community of AI-generated artwork, QuickGPT2 has you covered.
+- **Google OAuth Authentication**: Secure and fast login using Google accounts or email/password.
+- **Streaming AI Responses (SSE)**: Real-time, typewriter-effect text generation using Google Gemini.
+- **Voice Input**: Web Speech API integration to directly speak prompts into the chat box.
+- **Image Generation**: Seamless image generation capability directly in the chat using Pollinations.ai.
+- **Chat Management**: Organize conversations with pinning, renaming, and exporting as `.txt`.
+- **Smart Prompts**: Quick start empty chats with intelligent template suggestions.
+- **Analytics Dashboard**: Visual overview of your interaction stats (chats vs messages, user vs AI usage).
+- **Dark/Light Mode**: Smooth transitions with a sleek UI featuring `lucide-react` iconography.
 
----
+## Tech Stack
 
-## 🎯 Key Features
+- **Frontend**: React.js, Vite, Tailwind CSS, Zustand, React Router, Lucide React, Day.js
+- **Backend**: Node.js, Express, MongoDB (Mongoose), Passport.js (Google OAuth), Vitest (Testing)
+- **APIs**: Google Gemini SDK, Pollinations.ai, Web Speech API
 
-### 💬 **Intelligent Chat System**
+## Getting Started
 
-- **Real-time AI Conversations**: Engage in natural, context-aware conversations powered by OpenAI's GPT models
-- **Multi-Chat Management**: Create, manage, and switch between multiple chat sessions effortlessly
-- **Persistent Chat History**: All your conversations are securely stored and accessible anytime
-- **Syntax Highlighting**: Beautiful code rendering with Prism.js for technical discussions
-- **Markdown Support**: Rich text formatting for enhanced message readability
+### Prerequisites
+- Node.js v18+
+- MongoDB instance (local or Atlas)
+- Google Cloud Console account (for OAuth)
+- Gemini API key (optional if utilizing free tiers or fallbacks)
 
-### 🎨 **AI Image Generation**
+### Installation
 
-- **Text-to-Image Creation**: Transform your ideas into stunning visuals using AI
-- **Dual Mode Support**: Seamlessly switch between text chat and image generation modes
-- **High-Quality Output**: Generate professional-grade images with advanced AI models
-- **ImageKit Integration**: Optimized image storage and delivery for lightning-fast loading
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Vanshjaiswal-Dev/QuickGPT.git
+   cd QuickGPT
+   ```
 
-### 🌐 **Community Gallery**
+2. **Install dependencies:**
+   ```bash
+   # Install server dependencies
+   cd server
+   npm install
 
-- **Share Your Creations**: Publish your AI-generated images to the community
-- **Explore & Discover**: Browse through a curated gallery of community-shared artwork
-- **Responsive Grid Layout**: Beautiful, adaptive image gallery that works on all devices
-- **Direct Downloads**: Save any community image with a single click
+   # Install client dependencies
+   cd ../Client
+   npm install
+   ```
 
-### 🎨 **Modern User Interface**
+3. **Configure Environment Variables:**
+   - Copy `server/.env.example` to `server/.env` and update the keys (MongoDB URI, JWT Secret, Google Client ID/Secret).
+   - Copy `Client/.env.example` to `Client/.env` and ensure the server URL is correct.
 
-- **Dark/Light Theme**: Eye-friendly theme switching for comfortable viewing anytime
-- **Responsive Design**: Flawless experience across desktop, tablet, and mobile devices
-- **Intuitive Navigation**: Clean, modern sidebar with smooth animations
-- **Mobile-Optimized**: Hamburger menu and touch-friendly controls for mobile users
-- **Loading States**: Elegant loading animations for better user experience
+4. **Run the Application:**
+   From the root or `server` directory (using concurrently):
+   ```bash
+   npm run dev
+   ```
+   This will start both the backend server (port 8000) and the frontend Vite server (port 5173).
 
-### 🔐 **Security & Authentication**
+## Testing
 
-- **JWT Authentication**: Secure user authentication with JSON Web Tokens
-- **Protected Routes**: Middleware-based route protection for user data safety
-- **Password Encryption**: BCrypt hashing for secure password storage
-- **Token Management**: Automatic token refresh and session management
-
-### ⚡ **Performance & Optimization**
-
-- **Rate Limiting**: Smart request throttling to prevent abuse and ensure fair usage
-- **Client-Side Cooldowns**: 5-second minimum interval between requests for optimal performance
-- **Error Handling**: Comprehensive error management with user-friendly toast notifications
-- **Optimized Rendering**: React 19 with efficient state management using Zustand
-
----
-
-## 🏗️ Architecture
-
-### **Frontend Stack**
-
-- **React 19.2.0**: Latest React with improved performance and features
-- **Vite**: Lightning-fast build tool and development server
-- **TailwindCSS 4**: Modern utility-first CSS framework
-- **Zustand**: Lightweight state management solution
-- **React Router Dom**: Seamless client-side routing
-- **Axios**: Promise-based HTTP client
-- **React Hot Toast**: Beautiful, customizable toast notifications
-- **React Markdown**: Rich markdown rendering
-- **Prism.js**: Syntax highlighting for code blocks
-- **Lucide React**: Beautiful, consistent icons
-
-### **Backend Stack**
-
-- **Node.js & Express 5**: Fast, minimalist web framework
-- **MongoDB & Mongoose**: Flexible NoSQL database with elegant ODM
-- **OpenAI API**: Cutting-edge AI models for chat and image generation
-- **ImageKit SDK**: Cloud-based image management and optimization
-- **JWT**: Secure authentication and authorization
-- **BCrypt**: Password hashing and encryption
-- **CORS**: Cross-origin resource sharing middleware
-- **Rate Limiting**: Request throttling for API protection
-
-### **Database Models**
-
-- **User Model**: User authentication, profile, and preferences
-- **Chat Model**: Chat sessions with metadata and timestamps
-- **Message Model**: Individual messages with role, content, and attachments
-
----
-
-## 🎭 User Experience
-
-### **Seamless Workflow**
-
-1. **Sign Up/Login**: Quick and secure authentication process
-2. **Create a Chat**: Start a new conversation or continue an existing one
-3. **Choose Your Mode**: Toggle between text chat and image generation
-4. **Interact with AI**: Send prompts and receive intelligent responses
-5. **Share & Explore**: Publish your creations and discover community artwork
-6. **Personalize**: Switch themes and customize your experience
-
-### **Smart Features**
-
-- **Auto-Scroll**: Automatically scrolls to the latest message
-- **Scroll-to-Top Button**: Quick navigation for long conversations
-- **Mobile Menu**: Smooth slide-in sidebar for mobile devices
-- **Loading States**: Visual feedback during AI processing
-- **Error Recovery**: Graceful error handling with retry options
-
----
-
-## 🎨 Design Philosophy
-
-QuickGPT follows modern design principles:
-
-- **Minimalist Interface**: Clean, distraction-free design focused on content
-- **Gradient Aesthetics**: Beautiful gradient backgrounds for visual appeal
-- **Smooth Animations**: Subtle transitions and hover effects
-- **Accessibility**: High contrast ratios and readable typography
-- **Consistency**: Unified design language across all components
-
----
-
-## 📱 Responsive Design
-
-The application is fully responsive and optimized for:
-
-- **Desktop**: Full-featured experience with sidebar navigation
-- **Tablet**: Adaptive layout with optimized touch targets
-- **Mobile**: Collapsible menu and mobile-first design
-- **PWA Ready**: Can be installed as a Progressive Web App
-
----
-
-## 🔧 Technical Highlights
-
-### **State Management**
-
-- **Auth Store**: User authentication state and token management
-- **Chat Store**: Chat sessions and message history
-- **UI Store**: Theme preferences and UI state
-
-### **API Architecture**
-
-- **RESTful Design**: Clean, predictable API endpoints
-- **Modular Controllers**: Separated business logic for maintainability
-- **Middleware Chain**: Authentication, rate limiting, and error handling
-- **Response Standardization**: Consistent API response format
-
-### **Security Measures**
-
-- **Environment Variables**: Sensitive data stored securely
-- **Token Expiration**: Automatic session timeout
-- **Request Validation**: Input sanitization and validation
-- **CORS Configuration**: Controlled cross-origin access
-
----
-
-## 🌟 Use Cases
-
-- **Creative Writing**: Brainstorm ideas and get AI-powered suggestions
-- **Code Assistance**: Get help with programming problems and debugging
-- **Image Creation**: Generate custom artwork, logos, and illustrations
-- **Learning & Education**: Ask questions and learn new concepts
-- **Content Creation**: Create blog posts, social media content, and more
-- **Community Engagement**: Share and discover AI-generated art
-
----
-
-## 📊 Project Structure
-
-```
-QuickGPT/
-├── Client/                      # Frontend application
-│   ├── src/
-│   │   ├── Components/          # Reusable React components
-│   │   ├── pages/               # Page components
-│   │   ├── store/               # Zustand state management
-│   │   └── assets/              # Static assets and images
-│   └── public/                  # Public assets
-│
-└── server/                      # Backend application
-    ├── controllers/             # Request handlers
-    ├── models/                  # Database schemas
-    ├── routes/                  # API routes
-    ├── middlewares/             # Custom middleware
-    └── configs/                 # Configuration files
+The backend includes unit tests using Vitest.
+```bash
+cd server
+npm run test
 ```
 
----
+## Contributing
 
-## 🚀 Technologies Used
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-| Category           | Technologies                                    |
-| ------------------ | ----------------------------------------------- |
-| **Frontend**       | React, Vite, TailwindCSS, Zustand, React Router |
-| **Backend**        | Node.js, Express, MongoDB, Mongoose             |
-| **AI/ML**          | OpenAI API (GPT & DALL-E)                       |
-| **Cloud**          | ImageKit for image storage and optimization     |
-| **Authentication** | JWT, BCrypt                                     |
-| **UI Libraries**   | Lucide Icons, React Hot Toast, React Markdown   |
-| **Code Quality**   | ESLint, Prettier                                |
+## License
 
----
-
-## 🎯 Future Enhancements
-
-- 🔊 Voice input and text-to-speech capabilities
-- 📁 File upload and document analysis
-- 🤝 Real-time collaborative chats
-- 📈 Usage analytics and insights
-- 🎨 Advanced image editing tools
-- 🌍 Multi-language support
-- 📱 Native mobile applications
-- 🔌 Plugin system for extensibility
-
----
-
-## 📄 License
-
-This project is proprietary software. All rights reserved.
-
----
-
-## 👨‍💻 About
-
-QuickGPT2 is a demonstration of modern web development practices, combining powerful AI capabilities with an exceptional user experience. Built with passion and attention to detail, it showcases the potential of AI-powered applications in everyday use.
-
----
-
-<div align="center">
-
-**Made with ❤️ and AI**
-
-⭐ Star this repository if you find it helpful!
-
-</div>
+This project is licensed under the ISC License.
