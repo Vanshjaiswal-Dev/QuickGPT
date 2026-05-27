@@ -14,14 +14,14 @@ import { Search, Trash2, Images, Sun, Moon, User, LogOut, X, Pin, Edit2, Downloa
 const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
   const navigate = useNavigate();
   const { chats, setSelectedChat, fetchUsersChats, deleteChat: deleteChatFromStore, selectedChat } = useChatStore();
-  const { theme, toggleTheme, setTheme } = useUIStore();
+  const { theme, toggleTheme, setTheme, setLoginModalOpen } = useUIStore();
   const { user, token, logout } = useAuthStore();
 
   const [search, setSearch] = useState("");
 
   const createNewChat = async () => {
     if (!user) {
-      return toast.error("Please login to create a new chat");
+      return setLoginModalOpen(true);
     }
     navigate('/');
     await useChatStore.getState().createNewChat(token, navigate);
@@ -174,9 +174,11 @@ const Sidebar = ({isMenuopen, setIsMenuOpen}) => {
 
       {/* {user account} */}
 
-      <div  className="flex items-center justify-between gap-2 md:gap-3 p-2.5 md:p-3 mt-3 md:mt-4 border border-gray-300 
+      <div 
+        onClick={() => !user && setLoginModalOpen(true)}
+        className={`flex items-center justify-between gap-2 md:gap-3 p-2.5 md:p-3 mt-3 md:mt-4 border border-gray-300 
              dark:border-[#252525] rounded-md group bg-white dark:bg-[#1a1a1a]
-             md:hover:bg-gray-50 md:dark:hover:bg-[#1f1f1f] transition-all duration-200">
+             md:hover:bg-gray-50 md:dark:hover:bg-[#1f1f1f] transition-all duration-200 ${!user ? 'cursor-pointer' : ''}`}>
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
           <div className="w-7 h-7 md:w-7 md:h-7 rounded-full shrink-0 bg-gradient-to-r from-[#A456F7] to-[#3D81F6] flex items-center justify-center">
             <User className="w-4.5 h-4.5 md:w-4.5 md:h-4.5 text-white" />

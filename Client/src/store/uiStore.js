@@ -3,8 +3,10 @@ import { create } from 'zustand';
 export const useUIStore = create((set) => ({
   // State
   theme: localStorage.getItem("theme") || "light",
+  isLoginModalOpen: false,
 
   // Actions
+  setLoginModalOpen: (isOpen) => set({ isLoginModalOpen: isOpen }),
   setTheme: (theme) => {
     set({ theme });
     localStorage.setItem("theme", theme);

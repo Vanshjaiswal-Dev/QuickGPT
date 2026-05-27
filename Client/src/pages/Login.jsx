@@ -3,6 +3,8 @@ import { useAuthStore } from "../store/authStore";
 import axios from "../store/axiosInstance";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUIStore } from "../store/uiStore";
+import { X } from "lucide-react";
 
 const Login = () => {
   const [state, setState] = useState("login");
@@ -10,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setToken, fetchUser } = useAuthStore();
+  const { setLoginModalOpen } = useUIStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,6 +43,7 @@ const Login = () => {
         setToken(data.token);
         // Fetch user data immediately with the new token
         await fetchUser(data.token);
+        setLoginModalOpen(false); // Close modal on success
       }else{
         toast.error(data.message)
       }
@@ -48,12 +52,29 @@ const Login = () => {
     }
   }
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 dark:text-gray-300 rounded-lg shadow-xl border border-gray-200 dark:border-[#80609F]/30 bg-white dark:bg-[#242124]/80 backdrop-blur-sm">
-      <p className="text-2xl md:text-2xl font-medium m-auto">
-        <span className="text-indigo-500 dark:text-purple-400">User</span>{" "}
-        <span className="text-gray-900 dark:text-white">{state === "login" ? "Login" : "Sign Up"}</span>
-      </p>
-      {state === "register" && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <form onSubmit={handleSubmit} className="relative flex flex-col gap-4 m-auto items-start p-8 py-10 w-full max-w-sm sm:w-[400px] text-gray-500 dark:text-gray-300 rounded-2xl shadow-2xl border border-gray-200 dark:border-[#80609F]/30 bg-white dark:bg-[#1e1e1e] transform transition-all animate-in zoom-in-95 duration-200">
+        
+        {/* Close Button */}
+        <button 
+          type="button"
+          onClick={() => setLoginModalOpen(false)}
+          className="absolute top-4 right-4 p-1 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="text-center w-full mb-2">
+          <p className="text-2xl md:text-3xl font-semibold m-auto text-gray-900 dark:text-white">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A456F7] to-[#3D81F6]">Welcome</span>{" "}
+            {state === "login" ? "Back" : "to QuickGPT"}
+          </p>
+          <p className="text-sm mt-2 text-gray-500 dark:text-gray-400">
+            {state === "login" ? "Log in to continue your chat." : "Create an account to start chatting."}
+          </p>
+        </div>
+
+        {state === "register" && (
         <div className="w-full">
           <p className="text-sm md:text-base text-gray-700 dark:text-gray-300">Name</p>
           <input
@@ -132,7 +153,8 @@ const Login = () => {
         </svg>
         Continue with Google
       </button>
-    </form>
+      </form>
+    </div>
   );
 };
 

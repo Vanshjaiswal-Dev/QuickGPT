@@ -14,7 +14,7 @@ const Chatbox = ({ isMenuopen }) => {
 
   const containerRef = useRef(null);
   const { selectedChat, updateChatMessages } = useChatStore();
-  const { theme } = useUIStore();
+  const { theme, setLoginModalOpen } = useUIStore();
   const { user, token } = useAuthStore();
 
   const [messages, setMessages] = useState([]);
@@ -29,7 +29,7 @@ const Chatbox = ({ isMenuopen }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(!user) return toast.error('Please login to send message');
+    if(!user) return setLoginModalOpen(true);
     if(!prompt.trim()) return;
     
     // Client-side cooldown to prevent rapid requests
