@@ -282,19 +282,21 @@ const Chatbox = ({ isMenuopen }) => {
         {/* three dot animation */}
 
         {loading && (
-          <div className="loader flex items-center gap-1.5">
-            <div
-              className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white
-        animate-bounce"
-            ></div>
-            <div
-              className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white
-        animate-bounce"
-            ></div>
-            <div
-              className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white
-        animate-bounce"
-            ></div>
+          <div className="loader flex items-center gap-2 mt-4 px-2">
+            <div className="flex items-center gap-1.5 px-4 py-3 bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-[#252525]">
+              <div
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-[#A456F7] to-[#3D81F6]
+          animate-bounce"
+              ></div>
+              <div
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-[#A456F7] to-[#3D81F6]
+          animate-bounce" style={{ animationDelay: '0.15s' }}
+              ></div>
+              <div
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-[#A456F7] to-[#3D81F6]
+          animate-bounce" style={{ animationDelay: '0.3s' }}
+              ></div>
+            </div>
           </div>
         )}
 
