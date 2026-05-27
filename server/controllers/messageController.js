@@ -2,7 +2,6 @@
 import axios from "axios";
 import Chat from "../models/chat.js";
 import User from "../models/User.js";
-import { generatePollinationsImage } from "../configs/pollinations.js";
 import openai from "../configs/openai.js";
 
 export const textMessageController = async (req, res) => {
@@ -70,7 +69,7 @@ export const textMessageController = async (req, res) => {
 };
 
 
-// image generation controller using Pollinations.ai
+// image generation controller using Hugging Face + ImageKit
 
 export const imageMessageController = async (req, res) => {
     try {
@@ -95,29 +94,13 @@ export const imageMessageController = async (req, res) => {
            isImage: true,
        });
 
-       console.log("Generating image with Pollinations.ai for prompt:", prompt);
-
-       // Generate image URL using Pollinations.ai
-       // 🔥🔥 ABSOLUTE MAXIMUM QUALITY - 2K Resolution + Advanced Prompt Engineering
-       const qualityKeywords = "extremely detailed, ultra high resolution, 8k uhd quality, razor sharp focus, professional photography, perfect studio lighting, vibrant rich colors, masterpiece quality, award-winning composition, hyper photorealistic, intricate fine details, crystal clear clarity, perfect textures, cinematic lighting, depth of field";
-       const enhancedPrompt = `${prompt}, ${qualityKeywords}`;
-       
-       const generatedImageURL = generatePollinationsImage(enhancedPrompt, {
-           width: 2048,        // 🔥🔥 2K RESOLUTION - Maximum quality
-           height: 2048,       // 🏆 ULTIMATE quality setting
-           model: "flux-pro",  // 🏆 BEST model available
-           nologo: true,
-           enhance: true,      // AI prompt enhancement ENABLED
-       });
-
-       console.log("Generated image URL:", generatedImageURL);
-
-       // Pollinations.ai images are directly accessible via URL
-       // No need to download and re-upload, which saves time and resources
+       // Generate image via Hugging Face and upload to ImageKit
+       const { generateImage } = await import("../configs/huggingface.js");
+       const imageUrl = await generateImage(prompt);
 
        const reply = {
            role: 'assistant',
-           content: generatedImageURL,
+           content: imageUrl,
            timestamp: Date.now(),
            isImage: true,
            isPublished
@@ -130,6 +113,15 @@ export const imageMessageController = async (req, res) => {
 
     } catch (error) {
         console.error("Image generation error:", error.response?.data || error.message);
+        
+        // Handle HF model loading
+        if (error.response?.status === 503) {
+            return res.status(503).json({
+                success: false, 
+                message: "Image model is loading, please try again in ~20 seconds"
+            });
+        }
+        
         const errorMessage = error.response?.data?.message || error.message || "Image generation failed";
         res.status(error.response?.status || 500).json({success: false, message: errorMessage})
     }
